@@ -1,5 +1,7 @@
 package ru.itis.afarvazov.repositories;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -16,6 +18,8 @@ import java.util.*;
 @Repository
 public class CartsRepositoryImpl implements CartsRepository {
 
+    private final Logger logger = LoggerFactory.getLogger(CartsRepositoryImpl.class);
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     //language=SQL
@@ -29,20 +33,21 @@ public class CartsRepositoryImpl implements CartsRepository {
             "and active = :active;";
 
     //language=SQL
-    private static final String SQL_INSERT = "insert into cart(owner_id, total_price) " +
-            "values (:ownerId, :totalPrice) returning id;";
+    private static final String SQL_INSERT = "insert into cart(owner_id, total_price, active) " +
+            "values (:ownerId, :totalPrice, :active) returning id;";
 
     //language=SQL
     private static final String SQL_DELETE = "delete from cart where id = :id;";
 
     //language=SQL
     private static final String SQL_UPDATE = "update cart set " +
-            "owner_id = :ownerId, total_price = :totalPrice;";
+            "owner_id = :ownerId, total_price = :totalPrice, active = :active;";
 
     private final RowMapper<Cart> cartRowMapper = (row, i) -> Cart.builder()
             .id(row.getLong("id"))
             .ownerId(row.getLong("owner_id"))
             .totalPrice(row.getDouble("total_price"))
+            .active(row.getBoolean("active"))
             .build();
 
     public CartsRepositoryImpl(DataSource dataSource) {
@@ -76,9 +81,11 @@ public class CartsRepositoryImpl implements CartsRepository {
 
     @Override
     public void save(Cart entity) {
+        logger.info("Creating new cart");
         Map<String, Object> params = new HashMap<>();
-        params.put("owner_id", entity.getOwnerId());
-        params.put("total_price", entity.getTotalPrice());
+        params.put("ownerId", entity.getOwnerId());
+        params.put("totalPrice", entity.getTotalPrice());
+        params.put("active", entity.getActive());
         SqlParameterSource parameterSource = new MapSqlParameterSource(params);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(SQL_INSERT, parameterSource, keyHolder);
@@ -88,8 +95,9 @@ public class CartsRepositoryImpl implements CartsRepository {
     @Override
     public void update(Cart entity) {
         Map<String, Object> params = new HashMap<>();
-        params.put("owner_id", entity.getOwnerId());
-        params.put("total_price", entity.getTotalPrice());
+        params.put("ownerId", entity.getOwnerId());
+        params.put("totalPrice", entity.getTotalPrice());
+        params.put("active", entity.getActive());
         jdbcTemplate.update(SQL_UPDATE, params);
     }
 

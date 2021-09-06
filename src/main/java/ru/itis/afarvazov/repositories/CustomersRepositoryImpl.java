@@ -33,7 +33,7 @@ public class CustomersRepositoryImpl implements CustomersRepository {
 
     //language=SQL
     private static final String SQL_INSERT = "insert into customer(email, login, hash_password, role) " +
-            "values (:email, :login, :hash_password, :role) returning id;";
+            "values (:email, :login, :hashPassword, :role) returning id;";
 
     //language=SQL
     private static final String SQL_DELETE = "delete from customer where id = :id;";
@@ -76,7 +76,7 @@ public class CustomersRepositoryImpl implements CustomersRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("email", entity.getEmail());
         params.put("login", entity.getLogin());
-        params.put("hash_password", entity.getHashPassword());
+        params.put("hashPassword", entity.getHashPassword());
         params.put("role", entity.getRole().name());
         SqlParameterSource parameterSource = new MapSqlParameterSource(params);
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -89,7 +89,7 @@ public class CustomersRepositoryImpl implements CustomersRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("email", entity.getEmail());
         params.put("login", entity.getLogin());
-        params.put("hash_password", entity.getHashPassword());
+        params.put("hashPassword", entity.getHashPassword());
         params.put("role", entity.getRole().name());
         jdbcTemplate.update(SQL_UPDATE, params);
     }

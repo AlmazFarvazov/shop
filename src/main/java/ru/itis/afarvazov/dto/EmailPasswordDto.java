@@ -1,4 +1,4 @@
-package ru.itis.afarvazov.models;
+package ru.itis.afarvazov.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Cart {
+public class EmailPasswordDto {
 
-    private Long id;
-    private Long ownerId;
-    private Double totalPrice;
-    private Boolean active;
+    private String email;
+    private String password;
 
 }

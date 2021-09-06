@@ -9,29 +9,37 @@ import java.util.List;
 @Service
 public class CartsServiceImpl implements CartsService {
 
-    private final CartsRepository repository;
+    private final CartsRepository cartsRepository;
 
     public CartsServiceImpl(CartsRepository repository) {
-        this.repository = repository;
+        this.cartsRepository = repository;
+    }
+
+    @Override
+    public Cart getCartById(Long id) {
+        return cartsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cart not found!"));
     }
 
     @Override
     public List<Cart> getCartForCustomer(long customerId, boolean active) {
-        return repository.findByOwnerId(customerId, active);
+
+        return cartsRepository.findByOwnerId(customerId, active);
     }
 
     @Override
     public void createCart(Cart cart) {
-        repository.save(cart);
+        cartsRepository.save(cart);
     }
 
     @Override
     public void editCart(Cart cart) {
-        repository.update(cart);
+        cartsRepository.update(cart);
     }
 
     @Override
     public void deleteCart(Cart cart) {
-        repository.delete(cart);
+        cartsRepository.delete(cart);
     }
+
+
 }

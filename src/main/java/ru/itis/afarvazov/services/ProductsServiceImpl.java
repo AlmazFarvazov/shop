@@ -16,6 +16,16 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
+    public List<Product> getAllProducts() {
+        return repository.findAll();
+    }
+
+    @Override
+    public Product getProductById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Product not found!"));
+    }
+
+    @Override
     public List<Product> getProductsByTitle(String title) {
         return repository.findByTitle(title);
     }

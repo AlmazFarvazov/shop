@@ -1,5 +1,7 @@
 package ru.itis.afarvazov.services;
 
+import ru.itis.afarvazov.dto.CustomerSignUpForm;
+import ru.itis.afarvazov.dto.EmailPasswordDto;
 import ru.itis.afarvazov.models.Customer;
 
 import java.util.List;
@@ -12,5 +14,7 @@ public interface CustomersService {
     void editCustomer(Customer customer);
     void deleteCustomer(Customer customer);
     List<Customer> getAllCustomers(Customer customer);
+    void signUp(CustomerSignUpForm signUpForm);
+    String signIn(EmailPasswordDto emailPasswordDto);
 
 }

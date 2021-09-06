@@ -1,17 +1,15 @@
 package ru.itis.afarvazov.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ShopEmployee {
+public class ShopEmployee extends User {
 
-    private long id;
+    private Long id;
     private String email;
     private String login;
     private String firstName;

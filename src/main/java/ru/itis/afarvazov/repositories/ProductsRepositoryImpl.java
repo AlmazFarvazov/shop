@@ -25,7 +25,7 @@ public class ProductsRepositoryImpl implements ProductsRepository {
     private static final String SQL_SELECT_BY_CATEGORY = "select * from product where category = :category;";
 
     //language=SQL
-    private static final String SQL_SELECT_BY_TITLE = "select * from product where title like :title;";
+    private static final String SQL_SELECT_BY_TITLE = "select * from product where title ilike :title;";
 
     //language=SQL
     private static final String SQL_SELECT_ALL = "select * from product;";
@@ -90,6 +90,7 @@ public class ProductsRepositoryImpl implements ProductsRepository {
         params.put("price", entity.getPrice());
         params.put("category", entity.getCategory().name());
         params.put("available", entity.getAvailableQuantity());
+        params.put("id", entity.getId());
         jdbcTemplate.update(SQL_UPDATE, params);
     }
 
