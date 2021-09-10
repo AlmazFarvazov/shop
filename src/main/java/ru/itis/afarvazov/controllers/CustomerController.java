@@ -1,30 +1,20 @@
 package ru.itis.afarvazov.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.itis.afarvazov.dto.*;
 import ru.itis.afarvazov.models.Cart;
-import ru.itis.afarvazov.models.CartItem;
 import ru.itis.afarvazov.models.Customer;
-import ru.itis.afarvazov.models.User;
 import ru.itis.afarvazov.security.jwt.JwtTokenUtil;
-import ru.itis.afarvazov.security.jwt.JwtTokenUtilImpl;
 import ru.itis.afarvazov.services.CartItemsService;
 import ru.itis.afarvazov.services.CartsService;
 import ru.itis.afarvazov.services.CustomersService;
 import ru.itis.afarvazov.services.ProductsService;
 
-import javax.annotation.security.PermitAll;
-import java.util.List;
-
 @RestController
 public class CustomerController {
-
-    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     private final CustomersService customersService;
 
@@ -45,14 +35,14 @@ public class CustomerController {
         this.tokenUtil = tokenUtil;
     }
 
-    @PermitAll
+    @PreAuthorize("permitAll()")
     @PostMapping("/signUp")
     public ResponseEntity signUp(@RequestBody CustomerSignUpForm signUpForm) {
         customersService.signUp(signUpForm);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PermitAll
+    @PreAuthorize("permitAll()")
     @PostMapping("/signIn")
     public ResponseEntity<TokenDto> singIn(@RequestBody EmailPasswordDto emailPasswordDto) {
         TokenDto tokenDto = new TokenDto();

@@ -9,8 +9,6 @@ import ru.itis.afarvazov.models.Product;
 import ru.itis.afarvazov.services.ProductsService;
 import ru.itis.afarvazov.services.ShopEmployeesService;
 
-import javax.annotation.security.PermitAll;
-
 @RestController
 @RequestMapping("/management")
 public class ShopEmployeeController {
@@ -31,7 +29,7 @@ public class ShopEmployeeController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PermitAll
+    @PreAuthorize("permitAll()")
     @PostMapping("/signIn")
     public ResponseEntity<TokenDto> signIn(@RequestBody EmailPasswordDto emailPasswordDto) {
         TokenDto tokenDto = new TokenDto();
