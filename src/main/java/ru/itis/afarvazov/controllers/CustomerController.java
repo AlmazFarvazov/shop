@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.itis.afarvazov.dto.*;
 import ru.itis.afarvazov.models.Cart;
 import ru.itis.afarvazov.models.CartItem;
+import ru.itis.afarvazov.models.Customer;
 import ru.itis.afarvazov.models.User;
 import ru.itis.afarvazov.security.jwt.JwtTokenUtil;
+import ru.itis.afarvazov.security.jwt.JwtTokenUtilImpl;
 import ru.itis.afarvazov.services.CartItemsService;
 import ru.itis.afarvazov.services.CartsService;
 import ru.itis.afarvazov.services.CustomersService;
@@ -61,23 +63,8 @@ public class CustomerController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/cart")
     public ResponseEntity<CartWithItemsDto> getCart(@RequestHeader("X-TOKEN") String token) {
-        User user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
-        List<Cart> carts = cartsService.getCartForCustomer(user.getId(), true);
-        Cart cart;
-        if (carts.isEmpty()) {
-            cart = Cart.builder()
-                    .ownerId(user.getId())
-                    .totalPrice(0.0)
-                    .active(true)
-                    .build();
-            cartsService.createCart(cart);
-        } else {
-            cart = carts.get(0);
-        }
-        CartWithItemsDto cartDto = CartWithItemsDto.builder()
-                .totalPrice(cart.getTotalPrice())
-                .cartItems(cartItemsService.getCartItemsForCart(cart.getId()))
-                .build();
+        Customer user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
+        CartWithItemsDto cartDto = cartsService.getCartForCustomer(user);
         return ResponseEntity.ok(cartDto);
     }
 
@@ -85,32 +72,20 @@ public class CustomerController {
     @PutMapping("/cart/new/item")
     public ResponseEntity<CartWithItemsDto> addCartItem(@RequestHeader("X-TOKEN") String token,
                                             @RequestBody CartItemDto cartItemDto) {
-        User user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
+        Customer user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
         Cart cart = cartsService.getCartForCustomer(user.getId(), true).get(0);
-        CartItem cartItem = CartItem.builder()
-                .productId(cartItemDto.getProductId())
-                .cartId(cart.getId())
-                .price(productsService.getProductById(cartItemDto.getProductId()).getPrice() * cartItemDto.getAmount())
-                .amount(cartItemDto.getAmount())
-                .build();
-        cartItemsService.createCartItem(cartItem);
-        cart.setTotalPrice(cartItem.getAmount() *
-                productsService.getProductById(cartItem.getProductId()).getPrice() + cart.getTotalPrice());
-        cartsService.editCart(cart);
-        return ResponseEntity.ok(CartWithItemsDto.builder()
-                .cartItems(cartItemsService.getCartItemsForCart(cart.getId()))
-                .totalPrice(cart.getTotalPrice())
-                .build());
+        cartItemsService.createCartItem(cartItemDto, cart);
+        CartWithItemsDto cartWithItemsDto = cartsService.setTotalPrice(cartItemDto, cart);
+        return ResponseEntity.ok(cartWithItemsDto);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/cart/complete")
     public ResponseEntity<CartWithItemsDto> addCartItem(@RequestHeader("X-TOKEN") String token,
                                                         @RequestBody CartWithItemsDto cartWithItemsDto) {
-        User user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
-        Cart cart = cartsService.getCartForCustomer(user.getId(), true).get(0);
-        cart.setActive(false);
-        cartsService.editCart(cart);
+        Customer user = customersService.getCustomerByEmail(tokenUtil.getUsername(token));
+        cartsService.orderCompleted(user);
+        productsService.orderComplete(cartWithItemsDto);
         return ResponseEntity.ok(cartWithItemsDto);
     }
 

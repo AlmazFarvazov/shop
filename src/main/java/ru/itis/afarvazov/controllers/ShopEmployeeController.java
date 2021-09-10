@@ -24,9 +24,9 @@ public class ShopEmployeeController {
         this.productsService = productsService;
     }
 
-    @PermitAll
-    @PostMapping("/signUp")
-    public ResponseEntity signUp(@RequestBody ShopEmployeeSignUpForm signUpForm) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/add/employee")
+    public ResponseEntity addEmployee(@RequestBody ShopEmployeeSignUpForm signUpForm) {
         shopEmployeesService.signUp(signUpForm);
         return new ResponseEntity(HttpStatus.OK);
     }

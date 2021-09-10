@@ -1,6 +1,8 @@
 package ru.itis.afarvazov.services;
 
 import org.springframework.stereotype.Service;
+import ru.itis.afarvazov.dto.CartItemDto;
+import ru.itis.afarvazov.models.Cart;
 import ru.itis.afarvazov.models.CartItem;
 import ru.itis.afarvazov.repositories.CartItemsRepository;
 
@@ -11,8 +13,11 @@ public class CartItemsServiceImpl implements CartItemsService {
 
     private final CartItemsRepository repository;
 
-    public CartItemsServiceImpl(CartItemsRepository repository) {
+    private final ProductsService productsService;
+
+    public CartItemsServiceImpl(CartItemsRepository repository, ProductsService productsService) {
         this.repository = repository;
+        this.productsService = productsService;
     }
 
     @Override
@@ -34,4 +39,18 @@ public class CartItemsServiceImpl implements CartItemsService {
     public void deleteCartItem(CartItem cartItem) {
         repository.delete(cartItem);
     }
+
+    @Override
+    public CartItemDto createCartItem(CartItemDto cartItemDto, Cart cart) {
+        CartItem cartItem = CartItem.builder()
+                .productId(cartItemDto.getProductId())
+                .cartId(cart.getId())
+                .price(productsService.getProductById(cartItemDto.getProductId()).getPrice() *
+                        cartItemDto.getAmount())
+                .amount(cartItemDto.getAmount())
+                .build();
+        repository.save(cartItem);
+        return CartItemDto.from(cartItem);
+    }
+
 }

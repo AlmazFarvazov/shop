@@ -1,4 +1,4 @@
-package ru.itis.afarvazov.security.jwt;
+package ru.itis.afarvazov.security.jwt.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

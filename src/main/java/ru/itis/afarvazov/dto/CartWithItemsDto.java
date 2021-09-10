@@ -14,5 +14,5 @@ import java.util.List;
 @Builder
 public class CartWithItemsDto {
     private Double totalPrice;
-    List<CartItem> cartItems;
+    List<CartItemDto> cartItemDtos;
 }

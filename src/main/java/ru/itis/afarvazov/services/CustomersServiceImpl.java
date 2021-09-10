@@ -10,7 +10,7 @@ import ru.itis.afarvazov.exceptions.UserAlreadyExistException;
 import ru.itis.afarvazov.models.Customer;
 import ru.itis.afarvazov.models.Role;
 import ru.itis.afarvazov.repositories.CustomersRepository;
-import ru.itis.afarvazov.security.jwt.JwtTokenUtil;
+import ru.itis.afarvazov.security.jwt.JwtTokenUtilImpl;
 
 import java.util.List;
 
@@ -21,9 +21,9 @@ public class CustomersServiceImpl implements CustomersService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtilImpl jwtTokenUtil;
 
-    public CustomersServiceImpl(CustomersRepository repository, PasswordEncoder passwordEncoder, JwtTokenUtil jwtTokenUtil) {
+    public CustomersServiceImpl(CustomersRepository repository, PasswordEncoder passwordEncoder, JwtTokenUtilImpl jwtTokenUtil) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;

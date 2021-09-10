@@ -1,4 +1,4 @@
-package ru.itis.afarvazov.security.jwt;
+package ru.itis.afarvazov.security.jwt.auth;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationProvider;

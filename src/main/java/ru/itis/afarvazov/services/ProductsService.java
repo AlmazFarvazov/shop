@@ -1,5 +1,6 @@
 package ru.itis.afarvazov.services;
 
+import ru.itis.afarvazov.dto.CartWithItemsDto;
 import ru.itis.afarvazov.models.Product;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface ProductsService {
     void editProduct(Product product);
     void deleteProduct(Product product);
 
+    void orderComplete(CartWithItemsDto cartWithItemsDto);
 }

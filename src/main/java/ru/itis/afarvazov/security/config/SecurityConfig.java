@@ -6,8 +6,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.itis.afarvazov.security.jwt.JwtTokenAuthenticationFilter;
-import ru.itis.afarvazov.security.jwt.JwtTokenAuthenticationProvider;
+import ru.itis.afarvazov.security.jwt.auth.JwtTokenAuthenticationFilter;
+import ru.itis.afarvazov.security.jwt.auth.JwtTokenAuthenticationProvider;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

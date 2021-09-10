@@ -1,6 +1,8 @@
 package ru.itis.afarvazov.services;
 
 import org.springframework.stereotype.Service;
+import ru.itis.afarvazov.dto.CartItemDto;
+import ru.itis.afarvazov.dto.CartWithItemsDto;
 import ru.itis.afarvazov.models.Product;
 import ru.itis.afarvazov.repositories.ProductsRepository;
 
@@ -49,4 +51,15 @@ public class ProductsServiceImpl implements ProductsService {
     public void deleteProduct(Product product) {
         repository.delete(product);
     }
+
+    @Override
+    public void orderComplete(CartWithItemsDto cartWithItemsDto) {
+        List<CartItemDto> cartItems = cartWithItemsDto.getCartItemDtos();
+        for (CartItemDto cartItem : cartItems) {
+            Product product = getProductById(cartItem.getProductId());
+            product.setAvailableQuantity(product.getAvailableQuantity() - cartItem.getAmount());
+            repository.update(product);
+        }
+    }
+
 }

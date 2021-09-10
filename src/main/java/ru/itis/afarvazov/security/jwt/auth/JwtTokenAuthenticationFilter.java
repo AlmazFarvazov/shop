@@ -1,4 +1,4 @@
-package ru.itis.afarvazov.security.jwt;
+package ru.itis.afarvazov.security.jwt.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -10,7 +10,7 @@ import ru.itis.afarvazov.exceptions.UserAlreadyExistException;
 import ru.itis.afarvazov.models.Role;
 import ru.itis.afarvazov.models.ShopEmployee;
 import ru.itis.afarvazov.repositories.ShopEmployeesRepository;
-import ru.itis.afarvazov.security.jwt.JwtTokenUtil;
+import ru.itis.afarvazov.security.jwt.JwtTokenUtilImpl;
 
 import java.util.List;
 
@@ -21,10 +21,10 @@ public class ShopEmployeesServiceImpl implements ShopEmployeesService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtilImpl jwtTokenUtil;
 
     public ShopEmployeesServiceImpl(ShopEmployeesRepository repository, PasswordEncoder passwordEncoder,
-                                    JwtTokenUtil jwtTokenUtil) {
+                                    JwtTokenUtilImpl jwtTokenUtil) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
